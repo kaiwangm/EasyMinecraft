@@ -5,7 +5,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "stb_image.h"
+#include"stb_image.h"
 #include"Shader.h"
 
 float vertices[] = {
@@ -99,10 +99,9 @@ int main()
 	}
 	stbi_image_free(data);
 
-	
 
 	while (!glfwWindowShouldClose(window))
-	{ 
+	{
 		processInput(window);
 
 		glBindVertexArray(VAO[0]);
@@ -111,7 +110,7 @@ int main()
 
 		glClearColor(0.0f, 0.1f, 0.2f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		
+
 		float timevalue = glfwGetTime();
 		float greenvalue = (sin(timevalue) / 2.0f) + 0.5f;
 		GLuint vertexcolorcation = glGetUniformLocation(shaderpro.getID(), "ourcolor");
