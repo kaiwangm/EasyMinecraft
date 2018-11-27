@@ -32,10 +32,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stb_image.h">
+    <ClInclude Include="Shader.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.h">
+    <ClInclude Include="stb_image.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
