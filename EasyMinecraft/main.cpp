@@ -102,7 +102,7 @@ int main()
 	
 
 	while (!glfwWindowShouldClose(window))
-	{ //
+	{ 
 		processInput(window);
 
 		glBindVertexArray(VAO[0]);
