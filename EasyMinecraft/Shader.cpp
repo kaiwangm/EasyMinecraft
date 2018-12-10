@@ -66,6 +66,9 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	checkCompileErrors(ID, "PROGRAM");
 	glDeleteShader(vertex);
 	glDeleteShader(fragment);
+
+	vertexFile.close();
+	fragmentFile.close();
 }
 
 Shader::~Shader()

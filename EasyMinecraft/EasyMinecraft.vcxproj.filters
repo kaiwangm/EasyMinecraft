@@ -21,15 +21,22 @@
     <ClCompile Include="Shader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity\entity.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity\block.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="fragment.GLSL">
-      <Filter>源文件</Filter>
-    </None>
-    <None Include="vertex.GLSL">
-      <Filter>源文件</Filter>
-    </None>
+    <None Include="GLSL\fragment.GLSL" />
+    <None Include="GLSL\sky_fragment.glsl" />
+    <None Include="GLSL\sky_vertex.glsl" />
+    <None Include="GLSL\vertex.GLSL" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -38,10 +45,14 @@
     <ClInclude Include="stb_image.h">
       <Filter>头文件</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="wall.jpg">
-      <Filter>资源文件</Filter>
-    </Image>
+    <ClInclude Include="Camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity\entity.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity\block.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
