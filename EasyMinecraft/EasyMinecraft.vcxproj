@@ -135,6 +135,7 @@
     <None Include="GLSL\sky_vertex.glsl" />
     <None Include="GLSL\vertex.GLSL" />
     <None Include="packages.config" />
+    <None Include="Texture\blocks\gress.psd" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity\block.h" />
@@ -142,6 +143,17 @@
     <ClInclude Include="Entity\entity.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Texture\blocks\grass_side.png" />
+    <Image Include="Texture\blocks\grass_top.png" />
+    <Image Include="Texture\blocks\gress.png" />
+    <Image Include="Texture\sky\back.jpg" />
+    <Image Include="Texture\sky\bottom.jpg" />
+    <Image Include="Texture\sky\front.jpg" />
+    <Image Include="Texture\sky\left.jpg" />
+    <Image Include="Texture\sky\right.jpg" />
+    <Image Include="Texture\sky\top.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

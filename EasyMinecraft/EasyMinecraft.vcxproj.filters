@@ -37,6 +37,7 @@
     <None Include="GLSL\sky_fragment.glsl" />
     <None Include="GLSL\sky_vertex.glsl" />
     <None Include="GLSL\vertex.GLSL" />
+    <None Include="Texture\blocks\gress.psd" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -54,5 +55,34 @@
     <ClInclude Include="Entity\block.h">
       <Filter>头文件</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Texture\blocks\grass_side.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Texture\blocks\grass_top.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Texture\blocks\gress.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Texture\sky\back.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Texture\sky\bottom.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Texture\sky\front.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Texture\sky\left.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Texture\sky\right.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Texture\sky\top.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>
