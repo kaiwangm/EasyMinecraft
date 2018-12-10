@@ -245,7 +245,7 @@ int main()
 		{
 			for (int k= 0; k < 10; k++)
 			{
-				blocks.push_back(block(glm::vec3(i,-k-2 , j), "asdasd", &camera, &shaderpro));
+				blocks.push_back(block(glm::vec3(i,-k-2 , j), "asdasd", &camera, &shaderpro)); 
 			}
 		}
 	}
