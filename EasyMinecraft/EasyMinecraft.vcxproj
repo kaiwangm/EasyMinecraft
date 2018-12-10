@@ -145,6 +145,7 @@
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="ReadMeFile\images\2017.12.10.png" />
     <Image Include="Texture\blocks\grass_side.png" />
     <Image Include="Texture\blocks\grass_top.png" />
     <Image Include="Texture\blocks\gress.png" />
