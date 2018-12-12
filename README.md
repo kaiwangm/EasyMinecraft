@@ -12,4 +12,4 @@
 
 2018/12/12
 地图生成 简易碰撞判定
-![avatar](http://http://vpn.vnkmx.xyz/images/Snipaste_2018-12-12_22-54-17.jpg)
+![avatar](http://vpn.vnkmx.xyz/images/Snipaste_2018-12-12_22-54-17.jpg)
