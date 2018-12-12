@@ -1,2 +1,11 @@
 # EasyMinecraft
 基于opengl简易实现Minecraft
+
+2018/12/10
+添加方块
+![avatar](http://vpn.vnkmx.xyz/images/2017.12.10.png)
+
+2018/12/12
+性能优化
+添加光照，更多材质
+![avatar](http://vpn.vnkmx.xyz/images/Snipaste_2018-12-12_17-44-29.jpg)
