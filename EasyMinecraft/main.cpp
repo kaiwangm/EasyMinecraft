@@ -61,7 +61,7 @@ float skyboxVertices[] = {
 
 
 
-Camera camera(glm::vec3(0, 0, 5.0f), glm::radians(0.0f), glm::radians(180.0f), glm::vec3(0, 1.0f, 0));
+Camera camera(glm::vec3(50, 0, 50), glm::radians(0.0f), glm::radians(180.0f), glm::vec3(0, 1.0f, 0));
 float deltaX, deltaY;
 float lastX;
 float lastY;
@@ -191,7 +191,7 @@ int main()
 	glBindVertexArray(VAO[0]);
 
 	blockRanderMaster myblocks(&camera);
-
+	camera.setWorld(&(myblocks.Has_block));
 
 	unsigned int skyboxVAO, skyboxVBO;
 	glGenVertexArrays(1, &skyboxVAO);

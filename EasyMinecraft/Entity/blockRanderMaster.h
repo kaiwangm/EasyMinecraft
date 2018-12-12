@@ -8,6 +8,7 @@
 
 using namespace std;
 
+
 class blockRanderMaster
 {
 private:
@@ -70,15 +71,14 @@ private:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		// set texture filtering parameters
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		int width, height, nrchannel;
 		unsigned char* data = stbi_load(file, &width, &height, &nrchannel, 0);
 		if (data)
 		{
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 			glGenerateMipmap(GL_TEXTURE_2D);
-
 		}
 		else
 		{
@@ -86,8 +86,42 @@ private:
 		}
 		stbi_image_free(data);
 	}
+	void MakeWorld(const char* file)
+	{
+		int width, height, nrchannel;
+		unsigned char* data = stbi_load(file, &width, &height, &nrchannel, 0);
+		if (data)
+		{
+			for (int i = 0; i < width; i++)
+			{
+				for (int j = 0; j < height; j++)
+				{
+					int glow = data[i*width + j]/20;
+					for (int k = 0; k <= glow; k++)
+					{
+						m_blocks[0].push_back(glm::translate(glm::mat4(1.0f), glm::vec3(i, k-20, j)));
+						if (k != glow )
+						{
+							m_blocks[1].push_back(glm::translate(glm::mat4(1.0f), glm::vec3(i, k - 20, j)));
+						}
+						Has_block[{i, k-20, j}] = true;
+					}
+					
+				}
+			}
+		}
+		else
+		{
+			std::cout << "load texture failed." << std::endl;
+		}
+	}
 public:
+	map<std::tuple<int, int, int>, bool> Has_block;
 	blockRanderMaster(Camera *ca);
+	bool is_Has_Block(int i,int j,int k)
+	{
+		return Has_block[{i, k - 20, j}];
+	}
 	~blockRanderMaster();
 	void draw();
 };

@@ -31,28 +31,9 @@ blockRanderMaster::blockRanderMaster(Camera *ca)
 	
 	proMat = camera->proMat;
 
+	std::string file = "./Texture/map/world1.png";
+	MakeWorld(file.data());
 
-	for (int i = 0; i < 100; i++)
-	{
-		for (int j = 0; j < 100; j++)
-		{
-			for (int k = 0; k < 10; k++)
-			{
-					m_blocks[0].push_back(glm::translate(glm::mat4(1.0f), glm::vec3(i, -k-3, j)));
-			}
-		}
-	}
-
-	for (int i = 10; i < 20; i++)
-	{
-		for (int j = 10; j < 20; j++)
-		{
-			for (int k = 0; k < 10; k++)
-			{
-				m_blocks[1].push_back(glm::translate(glm::mat4(1.0f), glm::vec3(i, k-3, j)));
-			}
-		}
-	}
 }
 
 
@@ -67,7 +48,7 @@ void blockRanderMaster::draw()
 	viewMat = camera->GetViewMatrix();
 	proMat = camera->proMat;
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		string nowBlock = block_kinds[i];
 		glActiveTexture(GL_TEXTURE0);

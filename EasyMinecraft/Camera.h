@@ -1,11 +1,28 @@
 #pragma once
+#include<map>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+using namespace std;
+class pos
+{
+public:
+	int x, y, z;
+	pos(int i, int j, int k)
+	{
+		x = i; y = j; z = k;
+	}
+	bool operator < (const pos &o) const
+	{
+		return x < o.x || y < o.y || z < o.z;
+	}
+};
+
 class Camera
 {
 private:
+	map<std::tuple<int, int, int>, bool>* world;
 	void UpdateCameraVectors();
 	float SensitivityX = 0.01f;
 	float SensitivityY = 0.01f;
@@ -37,6 +54,10 @@ public:
 	void ProcessMouseMovement(float detalX, float detalY) ;
 	void UpdateCameraPosition();
 	void processInput(GLFWwindow *window);
+	void setWorld(map<std::tuple<int, int, int>, bool>* bl)
+	{
+		world = bl;
+	}
 	//void mouse_callback(GLFWwindow* window, double xPos, double yPos);
 };
 

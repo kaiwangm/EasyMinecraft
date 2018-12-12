@@ -52,10 +52,19 @@ void Camera::UpdateCameraPosition()
 	/*Position += Forward * speedZ;
 	Position += -Right * speedX;
 	Position += -Up*speedY;*/
+	glm::vec3 nextPosition= Position + glm::vec3(1, 0, 1)*Forward * speedZ -glm::vec3(1, 0, 1)*Right * speedX - glm::vec3(0, 1, 0)*Up*speedY;
+	if (!(*world)[{nextPosition.x, nextPosition.y, nextPosition.z}])
+	{
+		Position = nextPosition;
+	}
+	else
+	{
+		speedX = 0;
+		speedY = 0.0f;
+		speedZ = 0;
+	}
+	
 
-	Position += glm::vec3(1, 0, 1)*Forward * speedZ;
-	Position += -glm::vec3(1, 0, 1)*Right * speedX;
-	Position += -glm::vec3(0, 1, 0)*Up*speedY;
 	ViewMatrix = glm::lookAt(Position, Position + Forward, WorldUp);
 	proMat = glm::perspective(glm::radians(angle), 1920.0f / 1080.0f, 0.1f, 1000.0f);
 }
@@ -96,6 +105,7 @@ void Camera::processInput(GLFWwindow *window)
 	else if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
 		speedY = 0.1f;
+		return;
 	}
 	else if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
 	{
@@ -107,12 +117,12 @@ void Camera::processInput(GLFWwindow *window)
 		speedX *= 0.95f;
 		angle = 65.0f + (angle - 65.0f)*0.95f;
 	}
-	
-	if (Position.y > -1||speedY==0.1f)
+
+	if (!(*world)[{Position.x, Position.y-1, Position.z}])
 	{
 		speedY -= 0.005f;
 	}
-	else if((Position.y <= -1))
+	else
 	{
 		speedY = 0;
 	}
