@@ -30,6 +30,9 @@
     <ClCompile Include="Entity\block.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Entity\blockRanderMaster.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -53,6 +56,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Entity\block.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity\blockRanderMaster.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

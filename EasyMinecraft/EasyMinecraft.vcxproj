@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Entity\blockRanderMaster.cpp" />
     <ClCompile Include="Entity\block.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Entity\entity.cpp" />
@@ -138,6 +139,7 @@
     <None Include="Texture\blocks\gress.psd" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Entity\blockRanderMaster.h" />
     <ClInclude Include="Entity\block.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Entity\entity.h" />

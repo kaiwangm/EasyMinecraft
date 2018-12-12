@@ -8,100 +8,55 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <SFML/Graphics.hpp>
 
-//#include"stb_image.h"
 #include"Shader.h"
 #include"Camera.h"
-#include"Entity/block.h"
+#include"Entity/blockRanderMaster.h"
 
-float vertices[] = {
-	-0.5f, -0.5f, -0.5f,  0.25f, 0.3333f,
-	 0.5f, -0.5f, -0.5f,  0.5f, 0.3333f,
-	 0.5f,  0.5f, -0.5f,  0.5f, 0.00f, //ºó
-	 0.5f,  0.5f, -0.5f,  0.5f, 0.00f,
-	-0.5f,  0.5f, -0.5f,  0.25f, 0.00f,
-	-0.5f, -0.5f, -0.5f,  0.25f, 0.3333f,
-
-	-0.5f, -0.5f,  0.5f,  0.25f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.5f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  0.5f, 0.66f, //Ç°
-	 0.5f,  0.5f,  0.5f,  0.5f, 0.66f,
-	-0.5f,  0.5f,  0.5f,  0.25f, 0.66f,
-	-0.5f, -0.5f,  0.5f,  0.25f, 1.0f,
-
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.66f,
-	-0.5f,  0.5f, -0.5f,  0.25f, 0.66f,
-	-0.5f, -0.5f, -0.5f,  0.25f, 0.33f, //×ó
-	-0.5f, -0.5f, -0.5f,  0.25f, 0.33f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.33f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.66f,
-
-	 0.5f,  0.5f,  0.5f,  0.5f, 0.66f,
-	 0.5f,  0.5f, -0.5f,  0.75f, 0.66f,
-	 0.5f, -0.5f, -0.5f,  0.75f, 0.33f,
-	 0.5f, -0.5f, -0.5f,  0.75f, 0.33f, //ÓÒ
-	 0.5f, -0.5f,  0.5f,  0.5f, 0.33f,
-	 0.5f,  0.5f,  0.5f,  0.5f, 0.66f,
-
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.66f,
-	 0.5f, -0.5f, -0.5f,  0.25f, 0.66f,
-	 0.5f, -0.5f,  0.5f,  0.25f, 0.33f,  //µ×
-	 0.5f, -0.5f,  0.5f,  0.25f, 0.33f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.33f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.66f,
-
-	-0.5f,  0.5f, -0.5f,  0.25f, 0.66f,
-	 0.5f,  0.5f, -0.5f,  0.5f, 0.66f, //¶¥
-	 0.5f,  0.5f,  0.5f,  0.5f, 0.33f,
-	 0.5f,  0.5f,  0.5f,  0.5f, 0.33f,
-	-0.5f,  0.5f,  0.5f,  0.25f, 0.33f,
-	-0.5f,  0.5f, -0.5f,  0.25f, 0.66f
-};
 
 float skyboxVertices[] = {
 	// positions          
-	-20.0f,  20.0f, -20.0f,
-	-20.0f, -20.0f, -20.0f,
-	 20.0f, -20.0f, -20.0f,
-	 20.0f, -20.0f, -20.0f,
-	 20.0f,  20.0f, -20.0f,
-	-20.0f,  20.0f, -20.0f,
+	-200.0f,  200.0f, -200.0f,
+	-200.0f, -200.0f, -200.0f,
+	 200.0f, -200.0f, -200.0f,
+	 200.0f, -200.0f, -200.0f,
+	 200.0f,  200.0f, -200.0f,
+	-200.0f,  200.0f, -200.0f,
 
-	-20.0f, -20.0f,  20.0f,
-	-20.0f, -20.0f, -20.0f,
-	-20.0f,  20.0f, -20.0f,
-	-20.0f,  20.0f, -20.0f,
-	-20.0f,  20.0f,  20.0f,
-	-20.0f, -20.0f,  20.0f,
+	-200.0f, -200.0f,  200.0f,
+	-200.0f, -200.0f, -200.0f,
+	-200.0f,  200.0f, -200.0f,
+	-200.0f,  200.0f, -200.0f,
+	-200.0f,  200.0f,  200.0f,
+	-200.0f, -200.0f,  200.0f,
 
-	 20.0f, -20.0f, -20.0f,
-	 20.0f, -20.0f,  20.0f,
-	 20.0f,  20.0f,  20.0f,
-	 20.0f,  20.0f,  20.0f,
-	 20.0f,  20.0f, -20.0f,
-	 20.0f, -20.0f, -20.0f,
+	 200.0f, -200.0f, -200.0f,
+	 200.0f, -200.0f,  200.0f,
+	 200.0f,  200.0f,  200.0f,
+	 200.0f,  200.0f,  200.0f,
+	 200.0f,  200.0f, -200.0f,
+	 200.0f, -200.0f, -200.0f,
 
-	-20.0f, -20.0f,  20.0f,
-	-20.0f,  20.0f,  20.0f,
-	 20.0f,  20.0f,  20.0f,
-	 20.0f,  20.0f,  20.0f,
-	 20.0f, -20.0f,  20.0f,
-	-20.0f, -20.0f,  20.0f,
+	-200.0f, -200.0f,  200.0f,
+	-200.0f,  200.0f,  200.0f,
+	 200.0f,  200.0f,  200.0f,
+	 200.0f,  200.0f,  200.0f,
+	 200.0f, -200.0f,  200.0f,
+	-200.0f, -200.0f,  200.0f,
 
-	-20.0f,  20.0f, -20.0f,
-	 20.0f,  20.0f, -20.0f,
-	 20.0f,  20.0f,  20.0f,
-	 20.0f,  20.0f,  20.0f,
-	-20.0f,  20.0f,  20.0f,
-	-20.0f,  20.0f, -20.0f,
+	-200.0f,  200.0f, -200.0f,
+	 200.0f,  200.0f, -200.0f,
+	 200.0f,  200.0f,  200.0f,
+	 200.0f,  200.0f,  200.0f,
+	-200.0f,  200.0f,  200.0f,
+	-200.0f,  200.0f, -200.0f,
 
-	-20.0f, -20.0f, -20.0f,
-	-20.0f, -20.0f,  20.0f,
-	 20.0f, -20.0f, -20.0f,
-	 20.0f, -20.0f, -20.0f,
-	-20.0f, -20.0f,  20.0f,
-	 20.0f, -20.0f,  20.0f
+	-200.0f, -200.0f, -200.0f,
+	-200.0f, -200.0f,  200.0f,
+	 200.0f, -200.0f, -200.0f,
+	 200.0f, -200.0f, -200.0f,
+	-200.0f, -200.0f,  200.0f,
+	 200.0f, -200.0f,  200.0f
 };
 
 
@@ -235,21 +190,7 @@ int main()
 	glGenVertexArrays(1, VAO);
 	glBindVertexArray(VAO[0]);
 
-	Shader shaderpro("./GLSL/vertex.GLSL", "./GLSL/fragment.GLSL");
-
-
-	std::vector<block> blocks;
-	for (int i = 0; i < 10; i++)
-	{
-		for (int j = 0; j < 10; j++)
-		{
-			for (int k= 0; k < 10; k++)
-			{
-				blocks.push_back(block(glm::vec3(i,-k-2 , j), "asdasd", &camera, &shaderpro)); 
-			}
-		}
-	}
-	
+	blockRanderMaster myblocks(&camera);
 
 
 	unsigned int skyboxVAO, skyboxVBO;
@@ -274,11 +215,10 @@ int main()
 	Shader skyboxShader("./GLSL/sky_vertex.GLSL", "./GLSL/sky_fragment.GLSL");
 
 	glm::mat4 modelMat = glm::mat4(1.0f);
-	//modelMat = glm::rotate(modelMat, glm::radians(-55.0f), glm::vec3(1.0f, 0, 0));
 	glm::mat4 viewMat = glm::mat4(1.0f);
 	viewMat = camera.GetViewMatrix();
 	glm::mat4 proMat = glm::mat4(1.0f);
-	proMat = glm::perspective(glm::radians(45.0f), 1920.0f / 1080.0f, 0.1f, 100.0f);
+	proMat = camera.proMat;
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -287,7 +227,7 @@ int main()
 	{
 
 		viewMat = camera.GetViewMatrix();
-
+		proMat = camera.proMat;
 		camera.processInput(window);
 
 		glClearColor(0.0f, 0.1f, 0.2f, 1.0f);
@@ -299,11 +239,7 @@ int main()
 
 
 		
-		for (auto bl : blocks)
-		{
-			bl.Draw();
-		}
-		
+		myblocks.draw();
 		
 
 		glDepthFunc(GL_LEQUAL);

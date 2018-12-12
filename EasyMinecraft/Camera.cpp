@@ -37,7 +37,7 @@ Camera::~Camera()
 
 glm::mat4 Camera::GetViewMatrix()
 {
-	return glm::lookAt(Position, Position+Forward, WorldUp);
+	return ViewMatrix;
 }
 
 void Camera::ProcessMouseMovement(float deltaX, float deltaY)
@@ -56,7 +56,8 @@ void Camera::UpdateCameraPosition()
 	Position += glm::vec3(1, 0, 1)*Forward * speedZ;
 	Position += -glm::vec3(1, 0, 1)*Right * speedX;
 	Position += -glm::vec3(0, 1, 0)*Up*speedY;
-	
+	ViewMatrix = glm::lookAt(Position, Position + Forward, WorldUp);
+	proMat = glm::perspective(glm::radians(angle), 1920.0f / 1080.0f, 0.1f, 1000.0f);
 }
 
 
@@ -72,6 +73,13 @@ void Camera::processInput(GLFWwindow *window)
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
 		speedZ = 0.1f;
+		if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+		if (angle <= 145.0f)
+		{
+			speedZ = 0.2f;
+			angle = angle * 1.03;
+		}
+		
 	}
 	else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 	{
@@ -95,10 +103,11 @@ void Camera::processInput(GLFWwindow *window)
 	}
 	else
 	{
-		
+		speedZ *= 0.95f;
+		speedX *= 0.95f;
+		angle = 65.0f + (angle - 65.0f)*0.95f;
 	}
-	speedZ *= 0.95f;
-	speedX *= 0.95f;
+	
 	if (Position.y > -1||speedY==0.1f)
 	{
 		speedY -= 0.005f;

@@ -10,7 +10,7 @@ class block :
 	public entity
 {
 private:
-	float vertices[180] = {
+	inline const static float vertices[180] = {
 	-0.5f, -0.5f, -0.5f,  0.25f, 0.3333f,
 	 0.5f, -0.5f, -0.5f,  0.5f, 0.3333f,
 	 0.5f,  0.5f, -0.5f,  0.5f, 0.00f, //ºó

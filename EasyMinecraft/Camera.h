@@ -28,8 +28,11 @@ public:
 	float speedX = 0;
 	float speedY = 0;
 
+	float angle = 65.0f;
 	
 
+	glm::mat4 proMat = glm::perspective(glm::radians(65.0f), 1920.0f / 1080.0f, 0.1f, 1000.0f);
+	glm::mat4 ViewMatrix = glm::mat4(1.0f);
 	glm::mat4 GetViewMatrix();
 	void ProcessMouseMovement(float detalX, float detalY) ;
 	void UpdateCameraPosition();
