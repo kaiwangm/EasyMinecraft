@@ -1,6 +1,10 @@
 # EasyMinecraft
 基于opengl简易实现Minecraft
 
+2018/12/13
+更多材质
+![avatar](http://vpn.vnkmx.xyz/images/Snipaste_2018-12-12_22-54-17.jpg)
+
 2018/12/12
 地图生成 简易碰撞判定
 ![avatar](http://vpn.vnkmx.xyz/images/Snipaste_2018-12-12_22-54-17.jpg)
