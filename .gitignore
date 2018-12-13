@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 /EasyMinecraft/stb_image.h
+/EasyMinecraft/man

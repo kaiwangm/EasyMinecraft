@@ -128,10 +128,11 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Entity\entity.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GLSL\fragment.GLSL" />
+    <None Include="GLSL\man_fragment.GLSL" />
+    <None Include="GLSL\man_vertex.GLSL" />
     <None Include="GLSL\sky_fragment.glsl" />
     <None Include="GLSL\sky_vertex.glsl" />
     <None Include="GLSL\vertex.GLSL" />
@@ -143,6 +144,8 @@
     <ClInclude Include="Entity\block.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Entity\entity.h" />
+    <ClInclude Include="mesh.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
   </ItemGroup>

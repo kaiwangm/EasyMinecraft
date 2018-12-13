@@ -101,6 +101,6 @@ void block::Draw()
 	glUniformMatrix4fv(glGetUniformLocation(ID, "viewMat"), 1, GL_FALSE, glm::value_ptr(viewMat));
 	glUniformMatrix4fv(glGetUniformLocation(ID, "proMat"), 1, GL_FALSE, glm::value_ptr(proMat));
 
-	glUniformMatrix4fv(glGetUniformLocation(shader->getID(), "modelMat"), 1, GL_FALSE, glm::value_ptr(modelMat));
+	glUniformMatrix4fv(glGetUniformLocation(shader->ID, "modelMat"), 1, GL_FALSE, glm::value_ptr(modelMat));
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 }

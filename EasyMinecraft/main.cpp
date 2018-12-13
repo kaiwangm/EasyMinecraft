@@ -12,7 +12,7 @@
 #include"Shader.h"
 #include"Camera.h"
 #include"Entity/blockRanderMaster.h"
-
+#include"Model.h"
 
 float skyboxVertices[] = {
 	// positions          
@@ -61,7 +61,7 @@ float skyboxVertices[] = {
 
 
 
-Camera camera(glm::vec3(50, 0, 50), glm::radians(0.0f), glm::radians(180.0f), glm::vec3(0, 1.0f, 0));
+Camera camera(glm::vec3(50, 20, 50), glm::radians(0.0f), glm::radians(180.0f), glm::vec3(0, 1.0f, 0));
 float deltaX, deltaY;
 float lastX;
 float lastY;
@@ -193,6 +193,9 @@ int main()
 	blockRanderMaster myblocks(&camera);
 	camera.setWorld(&(myblocks.Has_block));
 
+	//Shader ourShader("./GLSL/man_vertex.GLSL", "./GLSL/man_fragment.GLSL");
+	//Model a("./man/nanosuit.obj");
+
 	unsigned int skyboxVAO, skyboxVBO;
 	glGenVertexArrays(1, &skyboxVAO);
 	glGenBuffers(1, &skyboxVBO);
@@ -221,7 +224,8 @@ int main()
 	proMat = camera.proMat;
 
 	glEnable(GL_DEPTH_TEST);
-
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	while (!glfwWindowShouldClose(window))
 	{
@@ -239,10 +243,24 @@ int main()
 
 
 		
-		myblocks.draw();
-		
 
-		glDepthFunc(GL_LEQUAL);
+
+		myblocks.draw();
+
+		//ourShader.use();
+
+		//// view/projection transformations
+		//ourShader.setMat4("projection", proMat);
+		//ourShader.setMat4("view", viewMat);
+		//// render the loaded model
+		//glm::mat4 model;
+		//model = glm::scale(model, glm::vec3(2, 2, 2));	// it's a bit too big for our scene, so scale it down
+		//model = glm::translate(model, glm::vec3(50, 20, 50)); // translate it down so it's at the center of the scene
+		//ourShader.setMat4("model", model);
+		//a.Draw(ourShader);
+
+		//glDepthFunc(GL_LEQUAL);
+
 		skyboxShader.use();
 		// ... 设置观察和投影矩阵
 		glUniform1i(glGetUniformLocation(skyboxShader.getID(), "skybox"), 0);

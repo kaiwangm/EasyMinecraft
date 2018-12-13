@@ -8,6 +8,7 @@ in vec3 FragPos;
 in vec3 Normal;
 
 uniform vec3 lightPos;
+uniform vec3 direction;
 uniform vec3 viewPos;
 uniform vec4 ourcolor;   
 uniform sampler2D ourTexture;
@@ -28,7 +29,6 @@ uniform Material material;
 
 void main() 
 { 
-	vec3 direction=vec3(0.2f, -0.4f, -0.5f);
 
 // »·¾³¹â
     vec3 ambient = lightColor * material.ambient;
