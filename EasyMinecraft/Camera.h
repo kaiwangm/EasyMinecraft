@@ -1,4 +1,6 @@
 #pragma once
+#include<iostream>
+#include<vector>
 #include<map>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -26,7 +28,12 @@ private:
 	void UpdateCameraVectors();
 	float SensitivityX = 0.01f;
 	float SensitivityY = 0.01f;
+	
 public:
+	double digtime;
+	double puttime;
+
+	vector<glm::mat4> *m_blocks;
 	Camera(glm::vec3 position,glm::vec3 target,glm::vec3 worldup);
 	Camera(glm::vec3 position, float pitch, float yaw, glm::vec3 wordlup) ;
 	~Camera();
@@ -58,6 +65,12 @@ public:
 	{
 		world = bl;
 	}
+	void setbl(vector<glm::mat4> * b)
+	{
+		m_blocks = b;
+	}
+	void dig();
+	void put();
 	//void mouse_callback(GLFWwindow* window, double xPos, double yPos);
 };
 

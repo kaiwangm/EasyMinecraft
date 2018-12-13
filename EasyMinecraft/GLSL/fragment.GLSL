@@ -29,7 +29,7 @@ uniform Material material;
 
 void main() 
 { 
-
+	
 // »·¾³¹â
     vec3 ambient = lightColor * material.ambient;
 
@@ -58,6 +58,9 @@ void main()
 
     vec3 result = ambient + diffuse + specular;
 
+	vec4 texColor =texture(ourTexture, TexCoord);
+	if(texColor.a < 0.1)
+        discard;
 
-	FragColor = vec4(result,1.0)*texture(ourTexture, TexCoord);
+	FragColor = vec4(result,1.0)*texColor;
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include <stdlib.h> 
 #include "entity.h"
 #include<iostream>
 #include<vector>
@@ -56,13 +57,12 @@ private:
 	-0.5f,  0.5f,  0.5f,  0.25f, 0.33f,		0.0f,  1.0f,  0.0f,
 	-0.5f,  0.5f, -0.5f,  0.25f, 0.66f,		0.0f,  1.0f,  0.0f
 	};
-	string block_kinds[10] = { "gress", "brick","base","sand","water"};
+	string block_kinds[10] = { "gress", "brick","base","sand","water","flower","bush" };
 	GLuint VBO[1];
 	Camera* camera;
 	glm::mat4 viewMat = glm::mat4(1.0f);
 	glm::mat4 proMat = glm::mat4(1.0f);
 	map<string, Shader> m_shader;
-	vector<glm::mat4> m_blocks[10];
 	GLuint TexBuffer[10];
 	time_t now_time;
 	void MakeTextureBuffer(GLuint TexBuffer, const char* file)
@@ -98,7 +98,7 @@ private:
 			{
 				for (int j = 0; j < height; j++)
 				{
-					int glow = data[i*width + j]/20;
+					int glow = data[i*width + j] / 10;
 					if (glow <= 3)
 					{
 						m_blocks[2].push_back(glm::translate(glm::mat4(1.0f), glm::vec3(i, 0, j)));
@@ -122,6 +122,14 @@ private:
 						else if (k == glow)
 						{
 							m_blocks[0].push_back(glm::translate(glm::mat4(1.0f), glm::vec3(i, k, j)));
+							if (rand() % 30 == 0 && glow >= 8)
+							{
+								m_blocks[5].push_back(glm::translate(glm::mat4(1.0f), glm::vec3(i, k + 1, j)));
+							}
+							else if (rand() % 8 == 1)
+							{
+								m_blocks[6].push_back(glm::translate(glm::mat4(1.0f), glm::vec3(i, k + 1, j)));
+							}
 						}
 						else
 						{
@@ -129,7 +137,7 @@ private:
 						}
 						Has_block[{i, k, j}] = true;
 					}
-					
+
 				}
 			}
 		}
@@ -139,9 +147,10 @@ private:
 		}
 	}
 public:
+	vector<glm::mat4> m_blocks[10];
 	map<std::tuple<int, int, int>, bool> Has_block;
 	blockRanderMaster(Camera *ca);
-	bool is_Has_Block(int i,int j,int k)
+	bool is_Has_Block(int i, int j, int k)
 	{
 		return Has_block[{i, k, j}];
 	}

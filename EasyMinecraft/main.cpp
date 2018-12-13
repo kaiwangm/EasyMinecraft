@@ -1,6 +1,7 @@
 #define GLEW_STATIC
 #define STB_IMAGE_IMPLEMENTATION
 #pragma once
+#include <windows.h>
 #include<iostream>
 #include<vector>
 #include <GL/glew.h>
@@ -13,6 +14,28 @@
 #include"Camera.h"
 #include"Entity/blockRanderMaster.h"
 #include"Model.h"
+
+#define MAX_CHAR        128
+
+void drawString(const char* str) {
+	static int isFirstCall = 1;
+	static GLuint lists;
+
+	if (isFirstCall) { // 如果是第一次调用，执行初始化
+						 // 为每一个ASCII字符产生一个显示列表
+		isFirstCall = 0;
+
+		// 申请MAX_CHAR个连续的显示列表编号
+		lists = glGenLists(MAX_CHAR);
+
+		// 把每个字符的绘制命令都装到对应的显示列表中
+		wglUseFontBitmaps(wglGetCurrentDC(), 0, MAX_CHAR, lists);
+	}
+	// 调用每个字符对应的显示列表，绘制每个字符
+	for (; *str != '\0'; ++str)
+		glCallList(lists + *str);
+}
+
 
 float skyboxVertices[] = {
 	// positions          
@@ -83,6 +106,25 @@ void mouse_callback(GLFWwindow* window, double xPos, double yPos)
 	camera.ProcessMouseMovement(deltaX, deltaY);
 }
 
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	if (action == GLFW_PRESS) switch (button)
+	{
+	case GLFW_MOUSE_BUTTON_LEFT:
+		camera.dig();
+		break;
+	case GLFW_MOUSE_BUTTON_MIDDLE:
+		cout << "left" << endl;
+		break;
+	case GLFW_MOUSE_BUTTON_RIGHT:
+		camera.put();
+		break;
+	default:
+		return;
+	}
+	return;
+}
+
 
 void MakeTextureBuffer(GLuint TexBuffer,const char* file)
 {
@@ -118,6 +160,7 @@ GLFWwindow* Gameinit()
 
 	GLFWwindow* window = glfwCreateWindow(1920, 1080, "Minecraft", NULL, NULL);
 	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetMouseButtonCallback(window, mouse_button_callback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 
@@ -192,7 +235,7 @@ int main()
 
 	blockRanderMaster myblocks(&camera);
 	camera.setWorld(&(myblocks.Has_block));
-
+	camera.setbl(myblocks.m_blocks);
 	//Shader ourShader("./GLSL/man_vertex.GLSL", "./GLSL/man_fragment.GLSL");
 	//Model a("./man/nanosuit.obj");
 
@@ -230,6 +273,8 @@ int main()
 	while (!glfwWindowShouldClose(window))
 	{
 
+		
+
 		viewMat = camera.GetViewMatrix();
 		proMat = camera.proMat;
 		camera.processInput(window);
@@ -242,7 +287,9 @@ int main()
 		glBindVertexArray(VAO[0]);
 
 
-		
+		glColor3f(1.0f, 1.0f, 1.0f);
+		glRasterPos2f(50.0f, 50.0f);
+		drawString("Hello, World!");
 
 
 		myblocks.draw();
@@ -273,6 +320,9 @@ int main()
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 		glDepthMask(GL_LESS);
+
+
+		
 
 
 		glfwSwapBuffers(window);

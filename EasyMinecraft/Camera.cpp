@@ -1,5 +1,4 @@
 #include "Camera.h"
-
 void Camera::UpdateCameraVectors()
 {
 	Forward.x = glm::cos(Pitch)*glm::sin(Yaw);
@@ -52,25 +51,99 @@ void Camera::UpdateCameraPosition()
 	/*Position += Forward * speedZ;
 	Position += -Right * speedX;
 	Position += -Up*speedY;*/
-	glm::vec3 nextPosition= Position + glm::vec3(1, 0, 1)*Forward * speedZ -glm::vec3(1, 0, 1)*Right * speedX - glm::vec3(0, 1, 0)*Up*speedY;
-	if (!(*world)[{nextPosition.x, nextPosition.y, nextPosition.z}])
+	glm::vec3  Positiondeta = glm::vec3(1, 0, 1)*Forward * speedZ - glm::vec3(1, 0, 1)*Right * speedX - glm::vec3(0, 1, 0)*Up*speedY;
+	glm::vec3  judePosition = Position + glm::vec3(10.0f)* Positiondeta;
+	glm::vec3 nextPosition = Position + Positiondeta;
+
+	int x = judePosition.x, y = judePosition.y, z = judePosition.z;
+	if (!(*world)[{x, y, z }])
 	{
 		Position = nextPosition;
 	}
 	else
 	{
-		speedX = 0;
-		speedY = 0.0f;
-		speedZ = 0;
+		if ((speedX > 0.1 || speedZ > 0.1))
+		{
+			//speedX = 0;
+			speedY = 0.1f;
+			//speedZ = 0;
+			Position.y += 0.1;
+		}
+
 	}
-	
+
 
 	ViewMatrix = glm::lookAt(Position, Position + Forward, WorldUp);
 	proMat = glm::perspective(glm::radians(angle), 1920.0f / 1080.0f, 0.1f, 1000.0f);
 }
 
+void Camera::dig()
+{
+	glm::vec3  Positiondeta = glm::vec3(1, 1, 1)*Forward;
+	glm::vec3  judePosition = Position + Positiondeta;
+
+	if (glfwGetTime() - digtime < 0.05)
+	{
+		return;
+	}
+	for (int t = 0; t < 15; t++)
+	{
+		int x = judePosition.x, y = judePosition.y, z = judePosition.z;
+		if ((*world)[{x, y, z }])
+		{
+			(*world)[{x, y, z }] = false;
 
 
+			glm::mat4 compare = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z));
+			for (int i = 0; i < 10; i++)
+			{
+				for (int j = 0; j < m_blocks[i].size(); j++)
+				{
+					if (m_blocks[i][j] == compare)
+					{
+						std::cout << "dig" << std::endl;
+						m_blocks[i].erase(m_blocks[i].cbegin() + j);
+						digtime = glfwGetTime();
+						return;
+					}
+				}
+			}
+		}
+		judePosition += Positiondeta;
+	}
+
+}
+
+
+void Camera::put()
+{
+	glm::vec3  Positiondeta = glm::vec3(1, 1, 1)*Forward;
+	glm::vec3  judePosition = Position + Positiondeta;
+
+	if (glfwGetTime() - puttime < 0.3)
+	{
+		return;
+	}
+
+	for (int t = 0; t < 15; t++)
+	{
+		int x = judePosition.x, y = judePosition.y, z = judePosition.z;
+		if ((*world)[{x, y, z }])
+		{
+			if (!(*world)[{x, y + 1, z }])
+			{
+				std::cout << "put" << std::endl;
+				m_blocks[0].push_back(glm::translate(glm::mat4(1.0f), glm::vec3(x, y + 1, z)));
+				(*world)[{x, y + 1, z}] = true;
+				puttime = glfwGetTime();
+				return;
+			}
+
+		}
+		judePosition += Positiondeta;
+	}
+
+}
 
 void Camera::processInput(GLFWwindow *window)
 {
@@ -82,13 +155,21 @@ void Camera::processInput(GLFWwindow *window)
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
 		speedZ = 0.1f;
-		if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-		if (angle <= 145.0f)
-		{
-			speedZ = 0.2f;
-			angle = angle * 1.03;
-		}
-		
+
+		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+			if (angle <= 145.0f)
+			{
+				speedZ = 0.2f;
+				angle = angle * 1.03;
+			}
+	}
+	else if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+	{
+		dig();
+	}
+	else if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+	{
+		put();
 	}
 	else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 	{
@@ -118,7 +199,7 @@ void Camera::processInput(GLFWwindow *window)
 		angle = 65.0f + (angle - 65.0f)*0.95f;
 	}
 
-	if (!(*world)[{Position.x, Position.y-1, Position.z}])
+	if (!(*world)[{Position.x, Position.y - 1, Position.z}])
 	{
 		speedY -= 0.005f;
 	}

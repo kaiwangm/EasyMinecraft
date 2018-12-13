@@ -22,13 +22,13 @@ blockRanderMaster::blockRanderMaster(Camera *ca)
 		m_shader[block_kinds[i]] = *myshader;
 		camera = ca;
 
-		glGenTextures(1, TexBuffer+i);
+		glGenTextures(1, TexBuffer + i);
 
 		glActiveTexture(GL_TEXTURE0);
 		std::string file = "./Texture/blocks/" + block_kinds[i] + ".png";
 		MakeTextureBuffer(TexBuffer[i], file.data());
 	}
-	
+
 	proMat = camera->proMat;
 
 	std::string file = "./Texture/map/world1.png";
@@ -44,7 +44,7 @@ blockRanderMaster::~blockRanderMaster()
 void blockRanderMaster::draw()
 {
 	double time = glfwGetTime();
-	glm::vec3 light(1,-1, -1);
+	glm::vec3 light(1, -1, -1);
 
 	viewMat = camera->GetViewMatrix();
 	proMat = camera->proMat;
@@ -59,7 +59,7 @@ void blockRanderMaster::draw()
 		GLuint ID = m_shader[nowBlock].getID();
 		glUniform1i(glGetUniformLocation(ID, "ourTexture"), 0);
 		glUniform1i(glGetUniformLocation(ID, "faceTexCoord"), 1);
-		glUniform3fv(glGetUniformLocation(ID, "lightPos"),1, glm::value_ptr(light));
+		glUniform3fv(glGetUniformLocation(ID, "lightPos"), 1, glm::value_ptr(light));
 		glUniform3fv(glGetUniformLocation(ID, "direction"), 1, glm::value_ptr(light));
 		m_shader[nowBlock].setVec3("lightColor", 1.0, 1.0, 1.0);
 
@@ -81,13 +81,13 @@ void blockRanderMaster::draw()
 		}
 		else
 		{
-			m_shader[nowBlock].setVec3("material.ambient", 0.2f, 0.2f, 0.2f);
-			m_shader[nowBlock].setVec3("material.diffuse", 0.9f, 0.9f, 0.9f);
-			m_shader[nowBlock].setVec3("material.specular", 0.2f, 0.2f, 0.2f);
+			m_shader[nowBlock].setVec3("material.ambient", 0.3f, 0.3f, 0.3f);
+			m_shader[nowBlock].setVec3("material.diffuse", 0.8f, 0.8f, 0.8f);
+			m_shader[nowBlock].setVec3("material.specular", 0.0f, 0.0f, 0.0f);
 			m_shader[nowBlock].setFloat("material.shininess", 32.0f);
 			m_shader[nowBlock].setVec3("viewPos", camera->Position);
 		}
-		
+
 
 		glUniformMatrix4fv(glGetUniformLocation(ID, "viewMat"), 1, GL_FALSE, glm::value_ptr(viewMat));
 		glUniformMatrix4fv(glGetUniformLocation(ID, "proMat"), 1, GL_FALSE, glm::value_ptr(proMat));
@@ -100,9 +100,14 @@ void blockRanderMaster::draw()
 				glDrawArrays(GL_TRIANGLES, 24, 30);
 				continue;
 			}
+			else if (i == 5 || i == 6)
+			{
+				glDrawArrays(GL_TRIANGLES, 12, 18);
+				continue;
+			}
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 	}
-	
-	
+
+
 }

@@ -17,7 +17,7 @@ out vec2 TexCoord;
 
 void main(){                 
 
-		gl_Position = proMat* viewMat*modelMat * vec4(aPos.x, aPos.y, aPos.z, 1.0);
+		gl_Position = proMat* viewMat*modelMat * (vec4(aPos.x, aPos.y, aPos.z, 1.0)+vec4(0.5,0.0,0.5,0));
 		TexCoord = aTexCoord;
 		FragPos = vec3(modelMat * vec4(aPos, 1.0));
 		Normal=aNormal;
