@@ -7,6 +7,8 @@
 #include <GLFW/glfw3.h>
 #include"../Shader.h"
 #include <ctime>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 using namespace std;
 
@@ -57,8 +59,9 @@ private:
 	-0.5f,  0.5f,  0.5f,  0.25f, 0.33f,		0.0f,  1.0f,  0.0f,
 	-0.5f,  0.5f, -0.5f,  0.25f, 0.66f,		0.0f,  1.0f,  0.0f
 	};
-	string block_kinds[10] = { "gress", "brick","base","sand","water","flower","bush" };
-	GLuint VBO[1];
+	
+	string block_kinds[10] = { "gress", "brick","base","sand","water","flower","bush","tree","leaf" };
+	GLuint VBO[2];
 	Camera* camera;
 	glm::mat4 viewMat = glm::mat4(1.0f);
 	glm::mat4 proMat = glm::mat4(1.0f);
@@ -98,7 +101,7 @@ private:
 			{
 				for (int j = 0; j < height; j++)
 				{
-					int glow = data[i*width + j] / 10;
+					int glow = data[i*width + j] / 12;
 					if (glow <= 3)
 					{
 						m_blocks[2].push_back(glm::translate(glm::mat4(1.0f), glm::vec3(i, 0, j)));
@@ -125,10 +128,31 @@ private:
 							if (rand() % 30 == 0 && glow >= 8)
 							{
 								m_blocks[5].push_back(glm::translate(glm::mat4(1.0f), glm::vec3(i, k + 1, j)));
+								Has_block[{i, k + 1, j}] = true;
 							}
 							else if (rand() % 8 == 1)
 							{
 								m_blocks[6].push_back(glm::translate(glm::mat4(1.0f), glm::vec3(i, k + 1, j)));
+								Has_block[{i, k + 1, j}] = true;
+							}
+							else if (rand() % 100 == 2 && glow <= 5)
+							{
+								for (int hei = 0; hei < 10; hei++)
+								{
+									m_blocks[7].push_back(glm::translate(glm::mat4(1.0f), glm::vec3(i, k + hei, j)));
+									Has_block[{i, k + hei, j}] = true;
+									if (hei > 5)
+									{
+										for (int w = -2; w <= 2; w++)
+										{
+											for (int d = -2; d <= 2; d++)
+											{
+												m_blocks[8].push_back(glm::translate(glm::mat4(1.0f), glm::vec3(i + w, k + hei, j + d)));
+												Has_block[{i + w, k + hei, j + d}] = true;
+											}
+										}
+									}
+								}
 							}
 						}
 						else
@@ -140,6 +164,72 @@ private:
 
 				}
 			}
+
+
+			for (auto iter : Has_block)
+			{
+				int x, y, z;
+				std::tie(x, y, z) = iter.first;
+
+				if ((Has_block.find({ x, y, z + 1 }) != Has_block.end()))
+				{
+
+				}
+				else
+				{
+					Should_draw[{x, y, z }] = true;
+					continue;
+				}
+
+				if ((Has_block.find({ x, y, z - 1 }) != Has_block.end()))
+				{
+
+				}
+				else
+				{
+					Should_draw[{x, y, z }] = true;
+					continue;
+				}
+
+
+				if ((Has_block.find({ x, y + 1, z }) != Has_block.end()))
+				{
+
+				}
+				else
+				{
+					Should_draw[{x, y, z }] = true;
+					continue;
+				}
+
+				if ((Has_block.find({ x, y - 1, z }) != Has_block.end()))
+				{
+				}
+				else
+				{
+					Should_draw[{x, y, z }] = true;
+					continue;
+				}
+
+				if ((Has_block.find({ x + 1, y, z }) != Has_block.end()))
+				{
+
+				}
+				else
+				{
+					Should_draw[{x, y, z }] = true;
+					continue;
+				}
+
+				if ((Has_block.find({ x - 1, y, z }) != Has_block.end()))
+				{
+				}
+				else
+				{
+					Should_draw[{x, y, z }] = true;
+					continue;
+				}
+			}
 		}
 		else
 		{
@@ -147,14 +237,17 @@ private:
 		}
 	}
 public:
+
 	vector<glm::mat4> m_blocks[10];
 	map<std::tuple<int, int, int>, bool> Has_block;
+	map<std::tuple<int, int, int>, bool> Should_draw;
 	blockRanderMaster(Camera *ca);
 	bool is_Has_Block(int i, int j, int k)
 	{
 		return Has_block[{i, k, j}];
 	}
 	~blockRanderMaster();
+	void drawHand();
 	void draw();
 };
 

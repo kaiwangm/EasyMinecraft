@@ -40,6 +40,8 @@
     <None Include="Texture\blocks\gress.psd" />
     <None Include="GLSL\man_fragment.GLSL" />
     <None Include="GLSL\man_vertex.GLSL" />
+    <None Include="GLSL\hand_fragment.GLSL" />
+    <None Include="GLSL\hand_vertex.GLSL" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">

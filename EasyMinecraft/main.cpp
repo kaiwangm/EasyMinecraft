@@ -84,7 +84,7 @@ float skyboxVertices[] = {
 
 
 
-Camera camera(glm::vec3(50, 20, 50), glm::radians(0.0f), glm::radians(180.0f), glm::vec3(0, 1.0f, 0));
+Camera camera(glm::vec3(250, 50, 250), glm::radians(0.0f), glm::radians(180.0f), glm::vec3(0, 1.0f, 0));
 float deltaX, deltaY;
 float lastX;
 float lastY;
@@ -125,6 +125,19 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 	return;
 }
 
+void scroll_callback(GLFWwindow* window, double x, double y)
+{
+	std::cout << x << y << std::endl;
+	camera.nowblock = camera.nowblock + 1;
+	if (camera.nowblock >= 10)
+	{
+		camera.nowblock = camera.nowblock % 10;
+	}
+	cout << camera.nowblock << endl;
+	return;
+}
+
+
 
 void MakeTextureBuffer(GLuint TexBuffer,const char* file)
 {
@@ -161,6 +174,10 @@ GLFWwindow* Gameinit()
 	GLFWwindow* window = glfwCreateWindow(1920, 1080, "Minecraft", NULL, NULL);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetMouseButtonCallback(window, mouse_button_callback);
+	glfwSetScrollCallback(window, scroll_callback);
+
+
+
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 
@@ -290,8 +307,7 @@ int main()
 		glColor3f(1.0f, 1.0f, 1.0f);
 		glRasterPos2f(50.0f, 50.0f);
 		drawString("Hello, World!");
-
-
+		
 		myblocks.draw();
 
 		//ourShader.use();
@@ -324,7 +340,7 @@ int main()
 
 		
 
-
+		
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 		camera.UpdateCameraPosition();

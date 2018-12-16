@@ -1,6 +1,10 @@
 # EasyMinecraft
 基于opengl简易实现Minecraft
 
+2018/12/16
+添加树 可设置方块放置种类
+![avatar](http://vpn.vnkmx.xyz/images/Snipaste_2018-12-16_17-34-03.jpg)
+
 2018/12/14
 种些花草
 ![avatar](http://vpn.vnkmx.xyz/images/Snipaste_2018-12-14_00-36-34.jpg)

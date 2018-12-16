@@ -70,6 +70,8 @@ public:
 		m_blocks = b;
 	}
 	void dig();
+
+	int nowblock = 0;
 	void put();
 	//void mouse_callback(GLFWwindow* window, double xPos, double yPos);
 };

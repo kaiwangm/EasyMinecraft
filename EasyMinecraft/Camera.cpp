@@ -39,9 +39,11 @@ glm::mat4 Camera::GetViewMatrix()
 	return ViewMatrix;
 }
 
+
 void Camera::ProcessMouseMovement(float deltaX, float deltaY)
 {
-	Pitch -= deltaY * SensitivityX;
+	if (Pitch - deltaY * SensitivityX<1.5&&Pitch - deltaY * SensitivityX > -1.5)
+		Pitch -= deltaY * SensitivityX;
 	Yaw -= deltaX * SensitivityY;
 	UpdateCameraVectors();
 }
@@ -74,7 +76,7 @@ void Camera::UpdateCameraPosition()
 
 
 	ViewMatrix = glm::lookAt(Position, Position + Forward, WorldUp);
-	proMat = glm::perspective(glm::radians(angle), 1920.0f / 1080.0f, 0.1f, 1000.0f);
+	proMat = glm::perspective(glm::radians(angle), 1920.0f / 1080.0f, 0.01f, 1000.0f);
 }
 
 void Camera::dig()
@@ -133,7 +135,7 @@ void Camera::put()
 			if (!(*world)[{x, y + 1, z }])
 			{
 				std::cout << "put" << std::endl;
-				m_blocks[0].push_back(glm::translate(glm::mat4(1.0f), glm::vec3(x, y + 1, z)));
+				m_blocks[nowblock].push_back(glm::translate(glm::mat4(1.0f), glm::vec3(x, y + 1, z)));
 				(*world)[{x, y + 1, z}] = true;
 				puttime = glfwGetTime();
 				return;
