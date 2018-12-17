@@ -275,6 +275,7 @@ int main()
 		"./Texture/sky/back.jpg"
 	};
 	unsigned int cubemapTexture = loadCubemap(faces);
+	myblocks.setSky(cubemapTexture);
 	Shader skyboxShader("./GLSL/sky_vertex.GLSL", "./GLSL/sky_fragment.GLSL");
 
 	glm::mat4 modelMat = glm::mat4(1.0f);

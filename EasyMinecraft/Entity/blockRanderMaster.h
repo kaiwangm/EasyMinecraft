@@ -62,6 +62,7 @@ private:
 	
 	string block_kinds[10] = { "gress", "brick","base","sand","water","flower","bush","tree","leaf" };
 	GLuint VBO[2];
+	GLuint sky;
 	Camera* camera;
 	glm::mat4 viewMat = glm::mat4(1.0f);
 	glm::mat4 proMat = glm::mat4(1.0f);
@@ -249,5 +250,9 @@ public:
 	~blockRanderMaster();
 	void drawHand();
 	void draw();
+	void setSky(GLuint k)
+	{
+		sky = k;
+	}
 };
 

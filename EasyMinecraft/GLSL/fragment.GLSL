@@ -12,12 +12,16 @@ uniform vec3 direction;
 uniform vec3 viewPos;
 uniform vec4 ourcolor;   
 uniform sampler2D ourTexture;
+uniform samplerCube sky;
+
 uniform sampler2D faceTexCoord;
 uniform vec3 lightColor;
 
 uniform mat4 modelMat;
 uniform mat4 viewMat;
 uniform mat4 proMat;
+uniform int iswater;
+uniform float time;
 
 struct Material {
     vec3 ambient;
@@ -52,9 +56,7 @@ void main()
 	float attenuation = 1.0 / (1.0f + 0.009f * distance + 
                 0.0032f * (distance * distance));
 
-	//ambient  *= attenuation; 
-	//diffuse  *= attenuation;
-	//specular *= attenuation;
+
 
     vec3 result = ambient + diffuse + specular;
 
@@ -62,5 +64,17 @@ void main()
 	if(texColor.a < 0.1)
         discard;
 
-	FragColor = vec4(result,1.0)*texColor;
+
+	if(iswater==0){
+			FragColor = vec4(result,1.0)*texColor;
+	}
+
+	else{
+		vec3 I = normalize(FragPos - viewPos);
+		vec3 R = reflect(I, normalize(Normal));
+		FragColor = vec4(texture(sky, R).rgb, 1.0)*vec4(0.7f);
+	}
+
+
+	
 }

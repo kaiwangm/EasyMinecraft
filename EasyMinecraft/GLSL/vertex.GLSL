@@ -9,7 +9,7 @@ layout (location = 2) in vec3 aNormal;
 uniform mat4 modelMat;
 uniform mat4 viewMat;
 uniform mat4 proMat;
-
+uniform int iswater;
 
 out vec3 vertexcolor;      
 out vec3 Normal;
@@ -19,8 +19,18 @@ out vec2 TexCoord;
 
 void main(){                 
 
-		gl_Position = proMat* viewMat*modelMat * (vec4(aPos.x, aPos.y, aPos.z, 1.0)+vec4(0.5,0.0,0.5,0));
-		TexCoord = aTexCoord;
-		FragPos = vec3(modelMat * vec4(aPos, 1.0));
-		Normal=aNormal;
+	if(iswater==0){
+			gl_Position = proMat* viewMat*modelMat * (vec4(aPos.x, aPos.y, aPos.z, 1.0)+vec4(0.5,0.0,0.5,0));
+			TexCoord = aTexCoord;
+			FragPos = vec3(modelMat * vec4(aPos, 1.0));
+			Normal=aNormal;
+	}
+
+	else{
+			gl_Position = proMat* viewMat*modelMat * (vec4(aPos.x, aPos.y, aPos.z, 1.0)+vec4(0.5,-0.2,0.5,0));
+			TexCoord = aTexCoord;
+			FragPos = vec3(modelMat * vec4(aPos, 1.0));
+			Normal=aNormal;
+	}
+		
 }
