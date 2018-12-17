@@ -311,19 +311,6 @@ int main()
 		
 		myblocks.draw();
 
-		//ourShader.use();
-
-		//// view/projection transformations
-		//ourShader.setMat4("projection", proMat);
-		//ourShader.setMat4("view", viewMat);
-		//// render the loaded model
-		//glm::mat4 model;
-		//model = glm::scale(model, glm::vec3(2, 2, 2));	// it's a bit too big for our scene, so scale it down
-		//model = glm::translate(model, glm::vec3(50, 20, 50)); // translate it down so it's at the center of the scene
-		//ourShader.setMat4("model", model);
-		//a.Draw(ourShader);
-
-		//glDepthFunc(GL_LEQUAL);
 
 		skyboxShader.use();
 		// ... 设置观察和投影矩阵
