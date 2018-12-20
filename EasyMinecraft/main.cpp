@@ -84,7 +84,7 @@ float skyboxVertices[] = {
 
 
 
-Camera camera(glm::vec3(250, 50, 250), glm::radians(0.0f), glm::radians(180.0f), glm::vec3(0, 1.0f, 0));
+Camera camera(glm::vec3(0, 50, 0), glm::radians(0.0f), glm::radians(180.0f), glm::vec3(0, 1.0f, 0));
 float deltaX, deltaY;
 float lastX;
 float lastY;
