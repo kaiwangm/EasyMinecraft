@@ -16,14 +16,6 @@ blockRanderMaster::blockRanderMaster(Camera *ca)
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
-	//for (int i = 0; i < 10; i++)
-	//{
-	//	glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
-	//	glBufferData(GL_ARRAY_BUFFER, m_blocks[0].size() * sizeof(glm::mat4), m_blocks[0].data(), GL_STREAM_DRAW);
-	//	glVertexAttribPointer(3, 16, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(0));
-	//	glEnableVertexAttribArray(3);
-	//}
-
 
 	for (int i = 0; i < 10; i++)
 	{
@@ -87,6 +79,9 @@ void blockRanderMaster::drawHand()
 	glUniformMatrix4fv(glGetUniformLocation(ID, "modelMat"), 1, GL_FALSE, glm::value_ptr(model));
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+
 }
 
 void blockRanderMaster::draw()
@@ -118,6 +113,7 @@ void blockRanderMaster::draw()
 		glUniform3fv(glGetUniformLocation(ID, "direction"), 1, glm::value_ptr(light));
 		m_shader[nowBlock].setVec3("lightColor", 1.0, 1.0, 1.0);
 		m_shader[nowBlock].setInt("iswater", 0);
+		
 		m_shader[nowBlock].setFloat("time", time);
 
 		if (i == 4)
@@ -151,10 +147,8 @@ void blockRanderMaster::draw()
 		glUniformMatrix4fv(glGetUniformLocation(ID, "proMat"), 1, GL_FALSE, glm::value_ptr(proMat));
 
 		glm::vec3 pos;
-		//int times = 0;
-		for (auto& model : m_blocks[i])
+		for (auto &model : m_blocks[i])
 		{
-
 			pos = glm::vec3(model[3].x, model[3].y, model[3].z);
 
 			if (glm::distance(pos, camera->Position) > 65)
@@ -174,15 +168,16 @@ void blockRanderMaster::draw()
 			{
 
 				glDrawArrays(GL_TRIANGLES, 24, 30);
-				continue;
 			}
 			else if (i == 5 || i == 6)
 			{
 				glDrawArrays(GL_TRIANGLES, 12, 18);
-				continue;
 			}
-			glDrawArrays(GL_TRIANGLES, 0, 36);
+			else
+			{
+				glDrawArrays(GL_TRIANGLES, 0, 36);
+			}
+		
 		}
-
 	}
 }

@@ -303,11 +303,6 @@ int main()
 		
 
 		glBindVertexArray(VAO[0]);
-
-
-		glColor3f(1.0f, 1.0f, 1.0f);
-		glRasterPos2f(50.0f, 50.0f);
-		drawString("Hello, World!");
 		
 		myblocks.draw();
 

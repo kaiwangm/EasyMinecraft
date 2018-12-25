@@ -31,10 +31,11 @@ struct Material {
 }; 
 uniform Material material;
 
+
 void main() 
 { 
-	
-// 环境光
+		
+	// 环境光
     vec3 ambient = lightColor * material.ambient;
 
     // 漫反射 
@@ -68,13 +69,11 @@ void main()
 	if(iswater==0){
 			FragColor = vec4(result,1.0)*texColor;
 	}
-
 	else{
 		vec3 I = normalize(FragPos - viewPos);
 		vec3 R = reflect(I, normalize(Normal));
 		FragColor = vec4(texture(sky, R).rgb, 1.0)*vec4(0.7f);
 	}
 
-
-	
 }
+	
