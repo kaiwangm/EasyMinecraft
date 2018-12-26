@@ -16,6 +16,7 @@ blockRanderMaster::blockRanderMaster(Camera *ca)
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
+	
 
 	for (int i = 0; i < 10; i++)
 	{
@@ -37,6 +38,27 @@ blockRanderMaster::blockRanderMaster(Camera *ca)
 
 	std::string file = "./Texture/map/world1.png";
 	MakeWorld(file.data());
+
+	
+	
+	for (int i = 0; i < 10; i++)
+	{
+		unsigned int instanceVBO;
+		glGenBuffers(1, &instanceVBO);
+		glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+		size_t len = m_blocks[i].size();
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * len, m_blocks[i].data(), GL_STREAM_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glEnableVertexAttribArray(4);
+		glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+		glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glVertexAttribDivisor(4, 1);
+		m_invbo[i] = instanceVBO;
+	}
+	
+	
+
 	glfwSetTime(0.0);
 }
 
@@ -51,22 +73,25 @@ void blockRanderMaster::drawHand()
 	string nowBlock = block_kinds[camera->nowblock];
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, TexBuffer[camera->nowblock]);
-	
 
-	m_shader["hand"].use();
+
+	Shader& nowsader = m_shader["hand"];
+	nowsader.use();
+
+
 
 	GLuint ID = m_shader["hand"].getID();
 	glUniform1i(glGetUniformLocation(ID, "ourTexture"), 0);
 	glUniform1i(glGetUniformLocation(ID, "faceTexCoord"), 1);
 	glUniform3fv(glGetUniformLocation(ID, "lightPos"), 1, glm::value_ptr(light));
 	glUniform3fv(glGetUniformLocation(ID, "direction"), 1, glm::value_ptr(light));
-	m_shader["hand"].setVec3("lightColor", 1.0, 1.0, 1.0);
+	nowsader.setVec3("lightColor", 1.0, 1.0, 1.0);
 
-	m_shader["hand"].setVec3("material.ambient", 0.3f, 0.3f, 0.3f);
-	m_shader["hand"].setVec3("material.diffuse", 0.8f, 0.8f, 0.8f);
-	m_shader["hand"].setVec3("material.specular", 0.0f, 0.0f, 0.0f);
-	m_shader["hand"].setFloat("material.shininess", 32.0f);
-	m_shader["hand"].setVec3("viewPos", camera->Position);
+	nowsader.setVec3("material.ambient", 0.3f, 0.3f, 0.3f);
+	nowsader.setVec3("material.diffuse", 0.8f, 0.8f, 0.8f);
+	nowsader.setVec3("material.specular", 0.0f, 0.0f, 0.0f);
+	nowsader.setFloat("material.shininess", 32.0f);
+	nowsader.setVec3("viewPos", camera->Position);
 
 
 	proMat = glm::mat4(1.0f);
@@ -103,81 +128,98 @@ void blockRanderMaster::draw()
 		glBindTexture(GL_TEXTURE_CUBE_MAP, sky);
 
 
-		m_shader[nowBlock].use();
+		Shader& nowsader = m_shader[nowBlock];
+		nowsader.use();
 		GLuint ID = m_shader[nowBlock].getID();
 		glUniform1i(glGetUniformLocation(ID, "ourTexture"), 0);
 		glUniform1i(glGetUniformLocation(ID, "faceTexCoord"), 1);
-		glUniform1i(glGetUniformLocation(ID, "sky"),2);
+		glUniform1i(glGetUniformLocation(ID, "sky"), 2);
 
 		glUniform3fv(glGetUniformLocation(ID, "lightPos"), 1, glm::value_ptr(light));
 		glUniform3fv(glGetUniformLocation(ID, "direction"), 1, glm::value_ptr(light));
-		m_shader[nowBlock].setVec3("lightColor", 1.0, 1.0, 1.0);
-		m_shader[nowBlock].setInt("iswater", 0);
-		
-		m_shader[nowBlock].setFloat("time", time);
+		nowsader.setVec3("lightColor", 1.0, 1.0, 1.0);
+		nowsader.setInt("iswater", 0);
+
+		nowsader.setFloat("time", time);
 
 		if (i == 4)
 		{
-			m_shader[nowBlock].setVec3("material.ambient", 0.3f, 0.3f, 0.3f);
-			m_shader[nowBlock].setVec3("material.diffuse", 0.5f, 0.0f, 0.0f);
-			m_shader[nowBlock].setVec3("material.specular", 1.9f, 1.9f, 1.9f);
-			m_shader[nowBlock].setFloat("material.shininess", 92.0f);
-			m_shader[nowBlock].setVec3("viewPos", camera->Position);
-			m_shader[nowBlock].setInt("iswater", 1);
+			nowsader.setVec3("material.ambient", 0.3f, 0.3f, 0.3f);
+			nowsader.setVec3("material.diffuse", 0.5f, 0.0f, 0.0f);
+			nowsader.setVec3("material.specular", 1.9f, 1.9f, 1.9f);
+			nowsader.setFloat("material.shininess", 92.0f);
+			nowsader.setVec3("viewPos", camera->Position);
+			nowsader.setInt("iswater", 1);
 		}
 		else if (i == 3)
 		{
-			m_shader[nowBlock].setVec3("material.ambient", 0.1f, 0.1f, 0.1f);
-			m_shader[nowBlock].setVec3("material.diffuse", 0.9f, 0.9f, 0.9f);
-			m_shader[nowBlock].setVec3("material.specular", 0.0f, 0.0f, 0.0f);
-			m_shader[nowBlock].setFloat("material.shininess", 32.0f);
-			m_shader[nowBlock].setVec3("viewPos", camera->Position);
+			nowsader.setVec3("material.ambient", 0.1f, 0.1f, 0.1f);
+			nowsader.setVec3("material.diffuse", 0.9f, 0.9f, 0.9f);
+			nowsader.setVec3("material.specular", 0.0f, 0.0f, 0.0f);
+			nowsader.setFloat("material.shininess", 32.0f);
+			nowsader.setVec3("viewPos", camera->Position);
 		}
 		else
 		{
-			m_shader[nowBlock].setVec3("material.ambient", 0.3f, 0.3f, 0.3f);
-			m_shader[nowBlock].setVec3("material.diffuse", 0.8f, 0.8f, 0.8f);
-			m_shader[nowBlock].setVec3("material.specular", 0.0f, 0.0f, 0.0f);
-			m_shader[nowBlock].setFloat("material.shininess", 32.0f);
-			m_shader[nowBlock].setVec3("viewPos", camera->Position);
+			nowsader.setVec3("material.ambient", 0.3f, 0.3f, 0.3f);
+			nowsader.setVec3("material.diffuse", 0.8f, 0.8f, 0.8f);
+			nowsader.setVec3("material.specular", 0.0f, 0.0f, 0.0f);
+			nowsader.setFloat("material.shininess", 32.0f);
+			nowsader.setVec3("viewPos", camera->Position);
 		}
 
 
 		glUniformMatrix4fv(glGetUniformLocation(ID, "viewMat"), 1, GL_FALSE, glm::value_ptr(viewMat));
 		glUniformMatrix4fv(glGetUniformLocation(ID, "proMat"), 1, GL_FALSE, glm::value_ptr(proMat));
 
-		glm::vec3 pos;
-		for (auto &model : m_blocks[i])
-		{
-			pos = glm::vec3(model[3].x, model[3].y, model[3].z);
+		size_t len = m_blocks[i].size();
 
-			if (glm::distance(pos, camera->Position) > 65)
-			{
-				continue;
-			}
-
-
-			float ang = glm::dot(glm::normalize(camera->Forward), glm::normalize(pos - camera->Position));
-			if (ang < 0.0)
-			{
-				continue;
-			}
-
-			glUniformMatrix4fv(glGetUniformLocation(ID, "modelMat"), 1, GL_FALSE, glm::value_ptr(model));
-			if (i == 4)
-			{
-
-				glDrawArrays(GL_TRIANGLES, 24, 30);
-			}
-			else if (i == 5 || i == 6)
-			{
-				glDrawArrays(GL_TRIANGLES, 12, 18);
-			}
-			else
-			{
-				glDrawArrays(GL_TRIANGLES, 0, 36);
-			}
+		//glClearBufferData(m_invbo[i],GL_ARRAY_BUFFER);
 		
-		}
+		//m_blocks[i].clear();
+		glEnableVertexAttribArray(4);
+		glBindBuffer(GL_ARRAY_BUFFER, m_invbo[i]);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * len, m_blocks[i].data(), GL_STREAM_DRAW);
+		glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glVertexAttribDivisor(4, 1);
+		glDrawArraysInstanced(GL_TRIANGLES, 0, 36, len);
+		//for (size_t j = 0; j < len; j++) 
+		//{
+		//	auto &pos = m_blocks[i][j];
+		//	//pos = glm::vec3(model[3].x, model[3].y, model[3].z);
+
+		//	glm::vec3 dis = pos - camera->Position;
+		//	if (dis.x > 60 || dis.x < -60 
+		//		|| dis.y>60 || dis.y < -60 
+		//		|| dis.z>60 || dis.z < -60)
+		//	{
+		//		continue;
+		//	}
+
+
+		//	float ang = glm::dot(glm::normalize(camera->Forward), glm::normalize(pos - camera->Position));
+		//	if (ang < -0.2)
+		//	{
+		//		continue;
+		//	}
+
+		//	//glUniformMatrix4fv(glGetUniformLocation(ID, "modelMat"), 1, GL_FALSE, glm::value_ptr(model));
+		//	nowsader.setVec3("pos", pos);
+		//	if (i == 4)
+		//	{
+
+		//		glDrawArrays(GL_TRIANGLES, 24, 30);
+		//	}
+		//	else if (i == 5 || i == 6)
+		//	{
+		//		glDrawArrays(GL_TRIANGLES, 12, 18);
+		//	}
+		//	else
+		//	{
+		//		glDrawArrays(GL_TRIANGLES, 0, 36);
+		//	}
+
+		//}
 	}
 }

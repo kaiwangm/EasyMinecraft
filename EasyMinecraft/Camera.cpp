@@ -76,7 +76,7 @@ void Camera::UpdateCameraPosition()
 
 
 	ViewMatrix = glm::lookAt(Position, Position + Forward, WorldUp);
-	proMat = glm::perspective(glm::radians(angle), 1920.0f / 1080.0f, 0.01f, 1000.0f);
+	proMat = glm::perspective(glm::radians(angle), 1920.0f / 1080.0f, 0.01f, 3000.0f);
 }
 
 void Camera::dig()
@@ -96,7 +96,7 @@ void Camera::dig()
 			(*world)[{x, y, z }] = false;
 
 
-			glm::mat4 compare = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z));
+			glm::vec3 compare = glm::vec3(x, y, z);
 			for (int i = 0; i < 10; i++)
 			{
 				for (int j = 0; j < m_blocks[i].size(); j++)
@@ -135,7 +135,7 @@ void Camera::put()
 			if (!(*world)[{x, y + 1, z }])
 			{
 				std::cout << "put" << std::endl;
-				m_blocks[nowblock].push_back(glm::translate(glm::mat4(1.0f), glm::vec3(x, y + 1, z)));
+				m_blocks[nowblock].push_back(glm::vec3(x, y + 1, z));
 				(*world)[{x, y + 1, z}] = true;
 				puttime = glfwGetTime();
 				return;
