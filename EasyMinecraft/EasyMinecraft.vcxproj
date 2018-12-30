@@ -154,8 +154,6 @@
     <ClInclude Include="Entity\block.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Entity\entity.h" />
-    <ClInclude Include="mesh.h" />
-    <ClInclude Include="Model.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
   </ItemGroup>

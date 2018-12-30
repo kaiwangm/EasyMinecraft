@@ -77,6 +77,10 @@ void Camera::UpdateCameraPosition()
 
 	ViewMatrix = glm::lookAt(Position, Position + Forward, WorldUp);
 	proMat = glm::perspective(glm::radians(angle), 1920.0f / 1080.0f, 0.01f, 3000.0f);
+	if (Position.y < -20)
+	{
+		Position.y = 100;
+	}
 }
 
 void Camera::dig()
@@ -106,6 +110,11 @@ void Camera::dig()
 						std::cout << "dig" << std::endl;
 						m_blocks[i].erase(m_blocks[i].cbegin() + j);
 						digtime = glfwGetTime();
+
+						size_t len = m_blocks[i].size();
+						glEnableVertexAttribArray(4);
+						glBindBuffer(GL_ARRAY_BUFFER, m_ibo[i]);
+						glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * len, m_blocks[i].data(), GL_STREAM_DRAW);
 						return;
 					}
 				}
@@ -113,7 +122,7 @@ void Camera::dig()
 		}
 		judePosition += Positiondeta;
 	}
-
+	
 }
 
 
@@ -138,13 +147,19 @@ void Camera::put()
 				m_blocks[nowblock].push_back(glm::vec3(x, y + 1, z));
 				(*world)[{x, y + 1, z}] = true;
 				puttime = glfwGetTime();
+
+				int i = nowblock;
+				size_t len = m_blocks[i].size();
+				glEnableVertexAttribArray(4);
+				glBindBuffer(GL_ARRAY_BUFFER, m_ibo[i]);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * len, m_blocks[i].data(), GL_STREAM_DRAW);
 				return;
 			}
 
 		}
 		judePosition += Positiondeta;
 	}
-
+	
 }
 
 void Camera::processInput(GLFWwindow *window)

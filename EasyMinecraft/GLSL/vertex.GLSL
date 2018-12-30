@@ -11,11 +11,13 @@ uniform mat4 viewMat;
 uniform mat4 proMat;
 uniform int iswater;
 //uniform vec3 pos;
+uniform mat4 lightSpaceMatrix;
 
 out vec3 vertexcolor;      
 out vec3 Normal;
 out vec3 FragPos;  
 out vec2 TexCoord;
+out vec4 FragPosLightSpace;
 
 mat4 transorm(vec3 pos)
 {
@@ -31,17 +33,17 @@ void main(){
 	mat4 modelMat=transorm(pos);
 
 	if(iswater==0){
-			gl_Position = proMat* viewMat*modelMat * (vec4(aPos.x, aPos.y, aPos.z, 1.0)+vec4(0.5,0.0,0.5,0));
+			gl_Position = proMat* viewMat*modelMat * (vec4(aPos.x, aPos.y, aPos.z, 1.0));
 			TexCoord = aTexCoord;
 			FragPos = vec3(modelMat * vec4(aPos, 1.0));
 			Normal=aNormal;
 	}
 
 	else{
-			gl_Position = proMat* viewMat*modelMat * (vec4(aPos.x, aPos.y, aPos.z, 1.0)+vec4(0.5,-0.2,0.5,0));
+			gl_Position = proMat* viewMat*modelMat * (vec4(aPos.x, aPos.y, aPos.z, 1.0)+vec4(0.0,-0.2,0.0,0));
 			TexCoord = aTexCoord;
 			FragPos = vec3(modelMat * vec4(aPos, 1.0));
 			Normal=aNormal;
 	}
-		
+	FragPosLightSpace = lightSpaceMatrix * vec4 (FragPos, 1.0);
 }

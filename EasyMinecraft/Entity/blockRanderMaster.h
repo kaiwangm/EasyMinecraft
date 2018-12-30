@@ -66,7 +66,7 @@ private:
 	Camera* camera;
 	glm::mat4 viewMat = glm::mat4(1.0f);
 	glm::mat4 proMat = glm::mat4(1.0f);
-	map<string, Shader> m_shader;
+	
 	GLuint TexBuffer[10];
 	time_t now_time;
 	void MakeTextureBuffer(GLuint TexBuffer, const char* file)
@@ -77,7 +77,7 @@ private:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		// set texture filtering parameters
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		int width, height, nrchannel;
 		unsigned char* data = stbi_load(file, &width, &height, &nrchannel, 0);
@@ -102,7 +102,7 @@ private:
 			{
 				for (int j = 0; j < height; j++)
 				{
-					int glow = data[i*width + j] /10;
+					int glow = data[i*width + j] /6;
 					if (glow <= 3)
 					{
 						m_blocks[2].push_back(glm::vec3(i, 0, j));
@@ -238,7 +238,8 @@ private:
 		}
 	}
 public:
-
+	glm::mat4 lightSpaceMatrix;
+	map<string, Shader> m_shader;
 	vector<glm::vec3> m_blocks[10];
 	GLfloat m_invbo[10];
 	map<std::tuple<int, int, int>, bool> Has_block;
@@ -251,6 +252,7 @@ public:
 	~blockRanderMaster();
 	void drawHand();
 	void draw();
+	void draw(Shader & shader);
 	void setSky(GLuint k)
 	{
 		sky = k;

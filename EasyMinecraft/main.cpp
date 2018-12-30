@@ -13,7 +13,6 @@
 #include"Shader.h"
 #include"Camera.h"
 #include"Entity/blockRanderMaster.h"
-#include"Model.h"
 
 #define MAX_CHAR        128
 
@@ -84,7 +83,7 @@ float skyboxVertices[] = {
 
 
 
-Camera camera(glm::vec3(0, 50, 0), glm::radians(0.0f), glm::radians(180.0f), glm::vec3(0, 1.0f, 0));
+Camera camera(glm::vec3(75, 15, 75), glm::radians(0.0f), glm::radians(180.0f), glm::vec3(0, 1.0f, 0));
 float deltaX, deltaY;
 float lastX;
 float lastY;
@@ -191,10 +190,6 @@ GLFWwindow* Gameinit()
 	return window;
 }
 
-void getVBO()
-{
-
-}
 
 unsigned int loadCubemap(std::vector<std::string> faces)
 {
@@ -253,6 +248,7 @@ int main()
 	blockRanderMaster myblocks(&camera);
 	camera.setWorld(&(myblocks.Has_block));
 	camera.setbl(myblocks.m_blocks);
+	camera.setibo(myblocks.m_invbo);
 	//Shader ourShader("./GLSL/man_vertex.GLSL", "./GLSL/man_fragment.GLSL");
 	//Model a("./man/nanosuit.obj");
 
@@ -277,7 +273,7 @@ int main()
 	unsigned int cubemapTexture = loadCubemap(faces);
 	myblocks.setSky(cubemapTexture);
 	Shader skyboxShader("./GLSL/sky_vertex.GLSL", "./GLSL/sky_fragment.GLSL");
-
+	Shader shadowShader("./GLSL/vertex_simpleDepthShader.GLSL", "./GLSL/fragment_simpleDepthShader.GLSL");
 	glm::mat4 modelMat = glm::mat4(1.0f);
 	glm::mat4 viewMat = glm::mat4(1.0f);
 	viewMat = camera.GetViewMatrix();
@@ -288,22 +284,81 @@ int main()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
+
+	/** 深度图 */
+	unsigned int depthMapFBO;
+	glGenFramebuffers(1, &depthMapFBO);
+
+	//使用2D纹理作为帧缓存的深度缓存
+	const unsigned int SHADOW_WIDTH = 9192, SHADOW_HEIGHT = 9192;
+	unsigned int depthMap;
+	glGenTextures(1, &depthMap);
+	glBindTexture(GL_TEXTURE_2D, depthMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH,
+		SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	//将纹理图附加到帧缓存上
+	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+	glDrawBuffer(GL_NONE);		//告诉OpenGL不需要绘制颜色数据
+	glReadBuffer(GL_NONE);		//告诉OpenGL不需要绘制颜色数据
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	/******************************************************************/
+		//从光源位置的正交投影矩阵
+	glm::vec3 lightPos(150, 20, 150);
+	float near_plane = 1.0f, far_plane = 200.0f;
+	glm::mat4 lightOrthoPoojection = glm::ortho(-1000.0f, 1000.0f, -1000.0f, 1000.0f, near_plane, far_plane);
+
+	//从光源位置的观察矩阵
+	glm::mat4 lightView = glm::lookAt(lightPos, lightPos - glm::vec3(10, 10, 10),
+		glm::vec3(0.0f, 1.0f, 0.0f));
+
+	//组合成光源空间的变换矩阵
+	glm::mat4 lightSpaceMatrix = lightOrthoPoojection * lightView;
+
+	//将矩阵传给着色器
+	shadowShader.use();
+	shadowShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
+
+
+
 	while (!glfwWindowShouldClose(window))
 	{
 
-		
+
 
 		viewMat = camera.GetViewMatrix();
 		proMat = camera.proMat;
 		camera.processInput(window);
 
+		glBindVertexArray(VAO[0]);
 		glClearColor(0.0f, 0.1f, 0.2f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		
-
-		glBindVertexArray(VAO[0]);
+		glCullFace(GL_FRONT);
 		
+
+		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+		glClear(GL_DEPTH_BUFFER_BIT);
+		myblocks.draw(shadowShader);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		//重置视口
+		glViewport(0, 0, 1920, 1080);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+
+		glCullFace(GL_BACK);
+		
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D, depthMap);
 		myblocks.draw();
 
 

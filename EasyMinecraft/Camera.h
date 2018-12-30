@@ -2,6 +2,7 @@
 #include<iostream>
 #include<vector>
 #include<map>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -34,6 +35,8 @@ public:
 	double puttime;
 
 	vector<glm::vec3> *m_blocks;
+	GLfloat* m_ibo;
+
 	Camera(glm::vec3 position,glm::vec3 target,glm::vec3 worldup);
 	Camera(glm::vec3 position, float pitch, float yaw, glm::vec3 wordlup) ;
 	~Camera();
@@ -43,7 +46,7 @@ public:
 	glm::vec3 Right;
 	glm::vec3 Up;
 	glm::vec3 WorldUp;
-
+	
 	float Pitch;
 	float Yaw;
 
@@ -68,6 +71,10 @@ public:
 	void setbl(vector<glm::vec3> * b)
 	{
 		m_blocks = b;
+	}
+	void setibo(GLfloat* b)
+	{
+		m_ibo = b;
 	}
 	void dig();
 
