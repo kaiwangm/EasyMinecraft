@@ -14,26 +14,6 @@
 #include"Camera.h"
 #include"Entity/blockRanderMaster.h"
 
-#define MAX_CHAR        128
-
-void drawString(const char* str) {
-	static int isFirstCall = 1;
-	static GLuint lists;
-
-	if (isFirstCall) { // 如果是第一次调用，执行初始化
-						 // 为每一个ASCII字符产生一个显示列表
-		isFirstCall = 0;
-
-		// 申请MAX_CHAR个连续的显示列表编号
-		lists = glGenLists(MAX_CHAR);
-
-		// 把每个字符的绘制命令都装到对应的显示列表中
-		wglUseFontBitmaps(wglGetCurrentDC(), 0, MAX_CHAR, lists);
-	}
-	// 调用每个字符对应的显示列表，绘制每个字符
-	for (; *str != '\0'; ++str)
-		glCallList(lists + *str);
-}
 
 
 float skyboxVertices[] = {
@@ -138,9 +118,9 @@ void scroll_callback(GLFWwindow* window, double x, double y)
 
 
 
-void MakeTextureBuffer(GLuint TexBuffer,const char* file)
+void MakeTextureBuffer(GLuint TexBuffer, const char* file)
 {
-	
+
 	stbi_set_flip_vertically_on_load(true);
 	glBindTexture(GL_TEXTURE_2D, TexBuffer);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
@@ -154,7 +134,7 @@ void MakeTextureBuffer(GLuint TexBuffer,const char* file)
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
-		
+
 	}
 	else
 	{
@@ -170,7 +150,7 @@ GLFWwindow* Gameinit()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(1920, 1080, "Minecraft", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1920, 1080, "2017192047_WangKai_project", NULL, NULL);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetMouseButtonCallback(window, mouse_button_callback);
 	glfwSetScrollCallback(window, scroll_callback);
@@ -224,11 +204,116 @@ unsigned int loadCubemap(std::vector<std::string> faces)
 }
 
 
+class Cloud
+{
+private:
+	inline const static float vertices[288] = {
+	-0.5f, -0.5f, -0.5f,  0.25f, 0.3333f,	0.0f,  0.0f, -1.0f,
+	 0.5f, -0.5f, -0.5f,  0.5f, 0.3333f,	0.0f,  0.0f, -1.0f,
+	 0.5f,  0.5f, -0.5f,  0.5f, 0.00f,      0.0f,  0.0f, -1.0f,//??
+	 0.5f,  0.5f, -0.5f,  0.5f, 0.00f,		0.0f,  0.0f, -1.0f,
+	-0.5f,  0.5f, -0.5f,  0.25f, 0.00f,		0.0f,  0.0f, -1.0f,
+	-0.5f, -0.5f, -0.5f,  0.25f, 0.3333f,	0.0f,  0.0f, -1.0f,
+
+	-0.5f, -0.5f,  0.5f,  0.25f, 1.0f,		0.0f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  0.5f, 1.0f,		0.0f,  0.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  0.5f, 0.66f,      0.0f,  0.0f, 1.0f,//?
+	 0.5f,  0.5f,  0.5f,  0.5f, 0.66f,		0.0f,  0.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  0.25f, 0.66f,		0.0f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.25f, 1.0f,		0.0f,  0.0f, 1.0f,
+
+	-0.5f,  0.5f,  0.5f,  0.0f, 0.66f,		1.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f, -0.5f,  0.25f, 0.66f,		1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f,  0.25f, 0.33f,     1.0f,  0.0f,  0.0f,//??
+	-0.5f, -0.5f, -0.5f,  0.25f, 0.33f,		1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.33f,		1.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 0.66f,		1.0f,  0.0f,  0.0f,
+
+	 0.5f,  0.5f,  0.5f,  0.5f, 0.66f,		1.0f,  0.0f,  0.0f,
+	 0.5f,  0.5f, -0.5f,  0.75f, 0.66f,		1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  0.75f, 0.33f,		1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  0.75f, 0.33f,     1.0f,  0.0f,  0.0f,    //??
+	 0.5f, -0.5f,  0.5f,  0.5f, 0.33f,		1.0f,  0.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  0.5f, 0.66f,		1.0f,  0.0f,  0.0f,
+
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.66f,		0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  0.25f, 0.66f,		0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,  0.25f, 0.33f,     0.0f, -1.0f,  0.0f,    //??
+	 0.5f, -0.5f,  0.5f,  0.25f, 0.33f,		0.0f, -1.0f,  0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.33f,		0.0f, -1.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.66f,		0.0f, -1.0f,  0.0f,
+
+	-0.5f,  0.5f, -0.5f,  0.25f, 0.66f,		0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f, -0.5f,  0.5f, 0.66f,      0.0f,  1.0f,  0.0f,//??
+	 0.5f,  0.5f,  0.5f,  0.5f, 0.33f,		0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  0.5f, 0.33f,		0.0f,  1.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f,  0.25f, 0.33f,		0.0f,  1.0f,  0.0f,
+	-0.5f,  0.5f, -0.5f,  0.25f, 0.66f,		0.0f,  1.0f,  0.0f
+	};
+	GLuint VBO[2];
+
+public:
+	vector<Cloud*> child;
+	float time = 0;
+	glm::mat4 tran = glm::mat4(1.0f);
+	glm::mat4 rote = glm::mat4(1.0f);
+	glm::mat4 scel = glm::mat4(1.0f);
+	Shader cloudshader;
+	void draw(glm::mat4 mod)
+	{
+		rote = rote * glm::rotate(glm::mat4(1.0f), 0.003f, glm::vec3(0, 1.0f, 0));
+		cloudshader.use();
+		cloudshader.setMat4("modelMat", tran*mod* rote*scel);
+		cloudshader.setMat4("viewMat", camera.GetViewMatrix());
+		cloudshader.setMat4("proMat", camera.proMat);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		for (int i = 0; i < child.size(); i++)
+		{
+			child[i]->draw(tran*mod);
+		}
+	}
+	Cloud(Shader& sh)
+	{
+		cloudshader = sh;
+
+		tran = glm::mat4(1.0f)*glm::translate(glm::mat4(1.0f), glm::vec3(75, 75, 75));
+		scel = glm::mat4(1.0f)*glm::scale(glm::mat4(1.0f), glm::vec3(40, 7, 60));
+
+		using namespace glm;
+
+		for (int i = 20; i < 1000; i = i + 20)
+		{
+			for (int j = 20; j < 1000; j = j + 20)
+			{
+				child.push_back(new Cloud(sh, vec3(i * 5 + rand() % 200 - 300, rand() % 20, j * 4 + rand() % 200 - 300), 0, glm::vec3(5 + rand() % 20, 2 + rand() % 5, 5 + rand() % 20)));
+			}
+		}
+
+	};
+
+	Cloud(Shader& sh, glm::vec3 tr, float ro, glm::vec3 sc)
+	{
+		cloudshader = sh;
+
+		tran = glm::mat4(1.0f)*glm::translate(glm::mat4(1.0f), tr);
+		rote = glm::mat4(1.0f)*glm::rotate(glm::mat4(1.0f), ro, glm::vec3(0.0f, 1.0f, 0.0f));
+		scel = glm::mat4(1.0f)*glm::scale(glm::mat4(1.0f), sc);
+
+	};
+	void settime(float time)
+	{
+		time = glfwGetTime();
+		tran = tran * glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0.1));
+	}
+
+	~Cloud() {};
+};
+
 int main()
 {
-	
+
 	glfwInit();
-	
+
 	GLFWwindow* window = Gameinit();
 	glfwMakeContextCurrent(window);
 
@@ -272,6 +357,8 @@ int main()
 	};
 	unsigned int cubemapTexture = loadCubemap(faces);
 	myblocks.setSky(cubemapTexture);
+	Shader cloudshader("./GLSL/cloud_v.glsl", "./GLSL/cloud_f.glsl");
+	Cloud myc(cloudshader);
 	Shader skyboxShader("./GLSL/sky_vertex.GLSL", "./GLSL/sky_fragment.GLSL");
 	Shader shadowShader("./GLSL/vertex_simpleDepthShader.GLSL", "./GLSL/fragment_simpleDepthShader.GLSL");
 	glm::mat4 modelMat = glm::mat4(1.0f);
@@ -283,13 +370,13 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
 
-	/** 深度图 */
+
+	/** ???? */
 	unsigned int depthMapFBO;
 	glGenFramebuffers(1, &depthMapFBO);
 
-	//使用2D纹理作为帧缓存的深度缓存
+	//???2D???????????????????
 	const unsigned int SHADOW_WIDTH = 9192, SHADOW_HEIGHT = 9192;
 	unsigned int depthMap;
 	glGenTextures(1, &depthMap);
@@ -301,29 +388,30 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	//将纹理图附加到帧缓存上
+	//???????????????????
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-	glDrawBuffer(GL_NONE);		//告诉OpenGL不需要绘制颜色数据
-	glReadBuffer(GL_NONE);		//告诉OpenGL不需要绘制颜色数据
+	glDrawBuffer(GL_NONE);		//????OpenGL????????????????
+	glReadBuffer(GL_NONE);		//????OpenGL????????????????
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	/******************************************************************/
-		//从光源位置的正交投影矩阵
+		//???????????????????
 	glm::vec3 lightPos(150, 20, 150);
 	float near_plane = 1.0f, far_plane = 200.0f;
 	glm::mat4 lightOrthoPoojection = glm::ortho(-1000.0f, 1000.0f, -1000.0f, 1000.0f, near_plane, far_plane);
 
-	//从光源位置的观察矩阵
+	//??????????????
 	glm::mat4 lightView = glm::lookAt(lightPos, lightPos - glm::vec3(10, 10, 10),
 		glm::vec3(0.0f, 1.0f, 0.0f));
 
-	//组合成光源空间的变换矩阵
+	//????????????????
 	glm::mat4 lightSpaceMatrix = lightOrthoPoojection * lightView;
 
-	//将矩阵传给着色器
+	//????????????
 	shadowShader.use();
 	shadowShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
+
 
 
 
@@ -340,9 +428,9 @@ int main()
 		glClearColor(0.0f, 0.1f, 0.2f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		
+
 		glCullFace(GL_FRONT);
-		
+
 
 		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
@@ -350,20 +438,23 @@ int main()
 		myblocks.draw(shadowShader);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-		//重置视口
+		//???????
 		glViewport(0, 0, 1920, 1080);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
+
 
 		glCullFace(GL_BACK);
-		
+
 		glActiveTexture(GL_TEXTURE3);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		myblocks.draw();
 
+		cout << glfwGetTime() << endl;
+		myc.settime(glfwGetTime());
+		myc.draw(glm::mat4(1.0f));
 
 		skyboxShader.use();
-		// ... 设置观察和投影矩阵
+		// ... ??????????????
 		glUniform1i(glGetUniformLocation(skyboxShader.getID(), "skybox"), 0);
 		glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
 		glUniformMatrix4fv(glGetUniformLocation(skyboxShader.getID(), "view"), 1, GL_FALSE, glm::value_ptr(view));
@@ -376,9 +467,9 @@ int main()
 		glDepthMask(GL_LESS);
 
 
-		
 
-		
+
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 		camera.UpdateCameraPosition();

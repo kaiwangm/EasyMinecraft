@@ -95,7 +95,7 @@ blockRanderMaster::blockRanderMaster(Camera *ca)
 		{
 			nowsader.setVec3("material.ambient", 0.1f, 0.1f, 0.1f);
 			nowsader.setVec3("material.diffuse", 0.9f, 0.9f, 0.9f);
-			nowsader.setVec3("material.specular", 0.0f, 0.0f, 0.0f);
+			nowsader.setVec3("material.specular", 0.1f, 0.1f, 0.1f);
 			nowsader.setFloat("material.shininess", 32.0f);
 			nowsader.setVec3("viewPos", camera->Position);
 		}

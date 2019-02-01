@@ -42,6 +42,8 @@
     <None Include="GLSL\man_vertex.GLSL" />
     <None Include="GLSL\hand_fragment.GLSL" />
     <None Include="GLSL\hand_vertex.GLSL" />
+    <None Include="GLSL\fragment_simpleDepthShader.GLSL" />
+    <None Include="GLSL\vertex_simpleDepthShader.GLSL" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">

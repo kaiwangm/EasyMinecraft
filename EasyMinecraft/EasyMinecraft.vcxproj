@@ -139,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="GLSL\fragment.GLSL" />
+    <None Include="GLSL\fragment_simpleDepthShader.GLSL" />
     <None Include="GLSL\hand_fragment.GLSL" />
     <None Include="GLSL\hand_vertex.GLSL" />
     <None Include="GLSL\man_fragment.GLSL" />
@@ -146,6 +147,7 @@
     <None Include="GLSL\sky_fragment.glsl" />
     <None Include="GLSL\sky_vertex.glsl" />
     <None Include="GLSL\vertex.GLSL" />
+    <None Include="GLSL\vertex_simpleDepthShader.GLSL" />
     <None Include="packages.config" />
     <None Include="Texture\blocks\gress.psd" />
   </ItemGroup>
