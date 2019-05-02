@@ -9,3 +9,6 @@
 /2017192047_王凯_实验说明书.docx
 *.pdf
 *.rar
+/Debug
+/EasyMinecraft/Debug
+/EasyMinecraft/x64/Debug

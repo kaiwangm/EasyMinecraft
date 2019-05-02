@@ -1,4 +1,4 @@
-#define GLEW_STATIC
+﻿#define GLEW_STATIC
 #define STB_IMAGE_IMPLEMENTATION
 #pragma once
 #include <windows.h>
@@ -150,7 +150,7 @@ GLFWwindow* Gameinit()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(1920, 1080, "2017192047_WangKai_project", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1920, 1080, "myCraft", NULL, NULL);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetMouseButtonCallback(window, mouse_button_callback);
 	glfwSetScrollCallback(window, scroll_callback);
@@ -449,7 +449,7 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		myblocks.draw();
 
-		cout << glfwGetTime() << endl;
+
 		myc.settime(glfwGetTime());
 		myc.draw(glm::mat4(1.0f));
 
